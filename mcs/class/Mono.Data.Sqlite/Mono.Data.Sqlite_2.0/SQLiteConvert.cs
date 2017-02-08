@@ -24,10 +24,12 @@ namespace Mono.Data.Sqlite
   /// </summary>
   public abstract class SqliteConvert
   {
-    /// <summary>
-    /// The value for the Unix epoch (e.g. January 1, 1970 at midnight, in UTC).
-    /// </summary>
-    protected static readonly DateTime UnixEpoch =
+        private const System.String DefaultDatetimeFormat = "yyyy-MM-dd HH:mm:ss.FFFFFFF";
+
+        /// <summary>
+        /// The value for the Unix epoch (e.g. January 1, 1970 at midnight, in UTC).
+        /// </summary>
+        protected static readonly DateTime UnixEpoch =
         new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
     /// <summary>
     /// An array of ISO8601 datetime formats we support conversion from
@@ -40,7 +42,7 @@ namespace Mono.Data.Sqlite
       "HH:mm:ss.FFFFFFF",
       "yy-MM-dd",
       "yyyy-MM-dd",
-      "yyyy-MM-dd HH:mm:ss.FFFFFFF",
+      DefaultDatetimeFormat,
       "yyyy-MM-dd HH:mm:ss",
       "yyyy-MM-dd HH:mm",                               
       "yyyy-MM-ddTHH:mm:ss.FFFFFFF",
@@ -207,7 +209,7 @@ namespace Mono.Data.Sqlite
         case SQLiteDateFormats.UnixEpoch:
           return ((long)(dateValue.Subtract(UnixEpoch).Ticks / TimeSpan.TicksPerSecond)).ToString();
         default:
-          return dateValue.ToString(_datetimeFormats[7], CultureInfo.InvariantCulture);
+          return dateValue.ToString(defaultDateFormat, CultureInfo.InvariantCulture);
       }
     }
 
